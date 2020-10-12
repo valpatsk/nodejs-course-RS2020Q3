@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Task = require('./task.model');
 const taskService = require('./task.service');
+const { getAllEntities } = require('../dataBase/localDB');
 
 router.route('/').get(async (req, res) => {
   const tasks = await taskService.getAll();
@@ -13,8 +14,12 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/:id').delete(async (req, res) => {
-  await taskService.remove(req.params.id);
-  res.sendStatus(200);
+  try {
+    await taskService.remove(req.params.id);
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(404);
+  }
 });
 
 router.route('/').post(async (req, res) => {
@@ -24,7 +29,9 @@ router.route('/').post(async (req, res) => {
       order: req.body.order,
       description: req.body.description,
       userId: req.body.userId,
-      boardId: req.body.boardId,
+      boardId: req.body.boardId
+        ? req.body.boardId
+        : getAllEntities('Boards')[getAllEntities('Boards').length - 1].id,
       columnId: req.body.columnId
     })
   );

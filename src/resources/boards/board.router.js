@@ -17,8 +17,13 @@ router.route('/:id').get(async (req, res) => {
 });
 
 router.route('/:id').delete(async (req, res) => {
-  await boardService.remove(req.params.id);
-  res.sendStatus(200);
+  try {
+    await boardService.remove(req.params.id);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err.message);
+    res.sendStatus(404);
+  }
 });
 
 router.route('/').post(async (req, res) => {
