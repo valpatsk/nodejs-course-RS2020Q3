@@ -10,7 +10,6 @@ const dataBase = {
   for (let i = 0; i < 3; i += 1) {
     dataBase.Users.push(new User());
   }
-  console.log(dataBase.Users);
 })();
 
 const getAllEntities = tableName => {
@@ -38,11 +37,13 @@ const removeEntity = (tableName, id) => {
     const ind = dataBase[tableName].indexOf(entity);
     dataBase[tableName] = [
       ...dataBase[tableName].slice(0, ind),
-      ...(dataBase[tableName].length > ind + 1)
+      ...(dataBase[tableName].length > ind + 1
+        ? dataBase[tableName].slice(ind + 1)
+        : [])
     ];
   }
 
-  return getEntity(tableName, id);
+  return entity;
 };
 
 const saveEntity = (tableName, entity) => {
