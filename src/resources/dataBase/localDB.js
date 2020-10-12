@@ -1,18 +1,43 @@
 const User = require('../users/user.model');
+const Task = require('../tasks/task.model');
+const Board = require('../boards/board.model');
 
 const dataBase = {
   Users: [],
   Boards: [],
-  Tasks: []
+  Tasks: [],
+  fixUsersStructure: user => {
+    if (user) {
+      dataBase.Tasks.filter(task => task).forEach(task => {
+        task.userId = task.userId === user.id ? null : task.userId;
+      });
+    }
+  },
+  fixBoardStructure: board => {
+    if (board) {
+      dataBase.Tasks.filter(task => task && task.boardId === board.id).forEach(
+        task => (dataBase.Tasks[dataBase.Tasks.indexOf(task)] = undefined)
+      );
+    }
+  }
 };
 
 (() => {
   for (let i = 0; i < 3; i += 1) {
     dataBase.Users.push(new User());
   }
+  const board = new Board();
+  dataBase.Boards.push(board);
+  dataBase.Tasks.push(
+    new Task({ boardId: board.id }),
+    new Task({ boardId: board.id })
+  );
 })();
 
 const getAllEntities = tableName => {
+  // if (id) {
+  //   return dataBase[tableName].filter(entity => entity.boardId === id);
+  // }
   return dataBase[tableName].filter(entity => entity);
 };
 
@@ -33,7 +58,7 @@ const getEntity = (tableName, id) => {
 const removeEntity = (tableName, id) => {
   const entity = getEntity(tableName, id);
   if (entity) {
-    // todo: fix database structure
+    // dataBase[`fix${tableName}Structure`](entity);
     const ind = dataBase[tableName].indexOf(entity);
     dataBase[tableName] = [
       ...dataBase[tableName].slice(0, ind),
