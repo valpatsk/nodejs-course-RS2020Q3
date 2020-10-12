@@ -13,13 +13,14 @@ const dataBase = {
       });
     }
   },
-  fixBoardStructure: board => {
+  fixBoardsStructure: board => {
     if (board) {
       dataBase.Tasks.filter(task => task && task.boardId === board.id).forEach(
         task => (dataBase.Tasks[dataBase.Tasks.indexOf(task)] = undefined)
       );
     }
-  }
+  },
+  fixTasksStructure: () => {}
 };
 
 (() => {
@@ -35,9 +36,6 @@ const dataBase = {
 })();
 
 const getAllEntities = tableName => {
-  // if (id) {
-  //   return dataBase[tableName].filter(entity => entity.boardId === id);
-  // }
   return dataBase[tableName].filter(entity => entity);
 };
 
@@ -58,7 +56,7 @@ const getEntity = (tableName, id) => {
 const removeEntity = (tableName, id) => {
   const entity = getEntity(tableName, id);
   if (entity) {
-    // dataBase[`fix${tableName}Structure`](entity);
+    dataBase[`fix${tableName}Structure`](entity);
     const ind = dataBase[tableName].indexOf(entity);
     dataBase[tableName] = [
       ...dataBase[tableName].slice(0, ind),

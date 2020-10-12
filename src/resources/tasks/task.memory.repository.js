@@ -6,13 +6,15 @@ const getAll = async () => {
 };
 
 const get = async id => {
-  const task = await DB.getEntity(TABLE_NAME, id);
-
-  if (!task) {
-    throw new Error(`Couldn't find a task with id: ${id}`);
+  try {
+    const task = await DB.getEntity(TABLE_NAME, id);
+    if (!task) {
+      throw new Error(`Couldn't find a task with id: ${id}`);
+    }
+    return task;
+  } catch (err) {
+    console.error(err.message);
   }
-
-  return task;
 };
 
 const remove = async id => {
