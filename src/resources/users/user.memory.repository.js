@@ -1,6 +1,8 @@
+const DB = require('../dataBase/localDB');
+const TABLE_NAME = 'Users';
+
 const getAll = async () => {
-  // TODO: mock implementation. should be replaced during task development
-  return [];
+  return DB.getAllEntities(TABLE_NAME);
 };
 
 module.exports = { getAll };
