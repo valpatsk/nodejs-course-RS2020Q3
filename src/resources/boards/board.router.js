@@ -12,16 +12,15 @@ router.route('/:id').get(async (req, res) => {
     const board = await boardService.get(req.params.id);
     res.status(200).send(board);
   } catch (err) {
-    console.error(err.message);
+    res.sendStatus(404);
   }
 });
 
 router.route('/:id').delete(async (req, res) => {
   try {
     await boardService.remove(req.params.id);
-    res.sendStatus(200);
+    res.sendStatus(204);
   } catch (err) {
-    console.error(err.message);
     res.sendStatus(404);
   }
 });
