@@ -10,7 +10,11 @@ router.route('/').get(async (req, res) => {
 
 router.route('/:id').get(async (req, res) => {
   const task = await taskService.get(req.params.id);
-  res.status(200).send(task);
+  if (task) {
+    res.status(200).json(task);
+  } else {
+    res.status(404).send('cannot find task');
+  }
 });
 
 router.route('/:id').delete(async (req, res) => {
